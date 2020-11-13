@@ -1,0 +1,11 @@
+com\springcloud\study\response\BaseResponse.class
+com\springcloud\study\service\Impl\ProductImpl.class
+com\springcloud\study\config\Serial2JsonConfig.class
+com\springcloud\study\controller\ProductController.class
+com\springcloud\study\dao\ProductDao.class
+com\springcloud\study\response\ObjectRestResponse.class
+com\springcloud\study\response\TableResultResponse.class
+com\springcloud\study\service\ProductService.class
+com\springcloud\study\entity\Product.class
+com\springcloud\study\response\TableResultResponse$TableData.class
+com\springcloud\study\ProductApplication.class

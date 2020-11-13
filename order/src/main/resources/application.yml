@@ -1,0 +1,72 @@
+server:
+  port: 9002
+  tomcat:
+    max-threads: 10
+spring:
+  application:
+    name: order-server
+eureka:
+  instance:
+    hostname: 192.168.161.130
+    metadata-map:
+      user.name: 测试元数据
+      user.password: 还是测试元数据
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    lease-expiration-duration-in-seconds: 10 #服务失效时间
+    lease-renewal-interval-in-seconds: 5 #服务向注册中心发送心跳的时间间隔
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka/ #,http://localhost:8000/eureka/
+#      defaultZone: http://192.168.1241.1:9000/eureka,http://192.168.1241.1:8000/eureka
+#product-server:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule  #负载均衡设置为随机策略
+#        ConnectionTimeout: 250  #ribbon连接超时时间  毫秒
+#        ReadTimeout: 1000 #ribbon读取数据时间  毫秒
+#        OkToRetryOnAllOperations: true #是否对所有操作都进行重试
+#        MaxAutoRetriesNextServer: 1 #切换实例的重试次数
+#        MaxAutoRetries: 1 #对当前实例的重试次数
+logging:
+  level:
+    com.springcloud.study.order.feign: DEBUG #优先级 从高到低分别是 ERROR、WARN、INFO、DEBUG
+
+feign:
+  hystrix:
+    enabled: true
+  compression:
+    response:
+      enabled: true
+  client:
+    config:
+      product-server:
+        loggerLevel: full
+
+
+
+# Execution相关的属性的配置：
+
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true # 执行是否启用超时，默认启用true，只在线程池隔离中有效。
+        isolation:
+          strategy: THREAD # 隔离策略，默认是Thread, 可选Thread｜Semaphore
+          thread:
+            timeoutInMilliseconds: 1000 #命令执行超时时间，默认1000ms，只在线程池隔离中有效
+            interruptOnTimeout: true # 发生超时是是否中断，默认true，只在线程池隔离中有效
+          semaphore:
+            # 最大并发请求数，默认10，该参数当使用ExecutionIsolationStrategy.SEMAPHORE策略时才有效。如果达到最大并发请求数，请求会被拒绝。
+            # 理论上选择semaphore的原则和选择thread一致，但选用semaphore时每次执行的单元要比较小且执行速度快（ms级别），否则的话应该用thread。
+            # semaphore应该占整个容器（tomcat）的线程池的一小部分。
+            maxConcurrentRequests: 10
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+#    hystrix:
+#      stream:
+#        enabled: true

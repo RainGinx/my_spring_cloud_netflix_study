@@ -1,0 +1,26 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: Eureka-server
+
+eureka:
+  server:
+    enable-self-preservation: false #关闭自我保护机制
+    eviction-interval-timer-in-ms: 4000 #剔除失效服务的时间间隔
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    fetch-registry: false
+    register-with-eureka: true
+    service-url:
+#      defaultZone: http://192.168.161.129:9000/eureka
+      defaultZone: http://127.0.0.1:9000/eureka
+
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:9000/eureka
+#    register-with-eureka: false
+#    fetch-registry: false
