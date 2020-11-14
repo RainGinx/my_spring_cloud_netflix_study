@@ -11,11 +11,11 @@ eureka:
   client:
     service-url:
       defaultZone: http://127.0.0.1:9000/eureka/ #,http://1127.0.0.1:8000/eureka/
+feign:
+  hystrix:
+    enabled: true
 
 turbine:
-#  combine-host-port: true #参数设置为true，可以让同一主机上的服务通过主机名与端口号的组合来进行区分，默认情况下会以host来区分不同的服务，这会使得在本机调试的时候，本机上的不同服务聚合成一个服务来统计
+  combine-host-port: true #参数设置为true，可以让同一主机上的服务通过主机名与端口号的组合来进行区分，默认情况下会以host来区分不同的服务，这会使得在本机调试的时候，本机上的不同服务聚合成一个服务来统计
   app-config: order-server #配置监控服务的列表，表明监控哪些服务多个使用","分割
-  cluster-name-expression: "'defalut'" #用于指定集群名称，当服务数量非常多的时候，可以启动多个
-#  aggregator:
-#    cluster-config: ribbon #指定聚合哪些集群,多个使用","分割，默认为default
-  instanceUrlSuffix: /hystrix.stream
+  cluster-name-expression: new String('default') #用于指定集群名称，当服务数量非常多的时候，可以启动多个
