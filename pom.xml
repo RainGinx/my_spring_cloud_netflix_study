@@ -9,6 +9,7 @@
         <module>product</module>
         <module>order</module>
         <module>turbine</module>
+        <module>order-sentinal</module>
     </modules>
 
     <parent>
@@ -65,6 +66,12 @@
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+            <version>2.1.0.RELEASE</version>
+            <type>pom</type>
         </dependency>
     </dependencies>
     <dependencyManagement>

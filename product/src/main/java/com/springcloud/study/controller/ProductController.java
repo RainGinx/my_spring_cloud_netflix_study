@@ -26,9 +26,14 @@ public class ProductController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }*/
-        Product product = productService.findById(id);
-        product.setName(port+"");
-        return product;
+       if (id == 1L){
+           Product product = productService.findById(id);
+           product.setName(port+"");
+           return product;
+       }else {
+           throw new RuntimeException("抛出异常");
+       }
+
     }
 
     @GetMapping()

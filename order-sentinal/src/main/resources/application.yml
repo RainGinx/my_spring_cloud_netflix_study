@@ -1,0 +1,36 @@
+server:
+  port: 7002
+spring:
+  application:
+    name: order-sentinel-server
+  cloud:
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:9004
+#      datasource:
+#        ds1:
+#          file:
+#            file: classpath:flowrule.json
+#            data-type: json
+#            rule-type: flow
+eureka:
+  instance:
+    hostname: order-sentinel-server
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    lease-expiration-duration-in-seconds: 10 #服务失效时间
+    lease-renewal-interval-in-seconds: 5 #服务向注册中心发送心跳的时间间隔
+  client:
+    service-url:
+      defaultZone: http://localhost:9000/eureka/ #,http://localhost:8000/eureka/
+#      defaultZone: http://192.168.1241.1:9000/eureka,http://192.168.1241.1:8000/eureka
+
+feign:
+  sentinel:
+    enabled: true
+
+
+#logging:
+#  level:
+#    root: WARN #优先级 从高到低分别是 ERROR、WARN、 、DEBUG
