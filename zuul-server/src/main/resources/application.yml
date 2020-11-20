@@ -1,0 +1,16 @@
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:9000/eureka/ #,http://1127.0.0.1:8000/eureka/
+server:
+  port: 9006
+zuul:
+  routes:
+    order-server: /order/**
+spring:
+  application:
+    name: zuul-server
