@@ -8,9 +8,22 @@ eureka:
       defaultZone: http://127.0.0.1:9000/eureka/ #,http://1127.0.0.1:8000/eureka/
 server:
   port: 9006
+
+#zuul网关配置
 zuul:
-  routes:
-    order-server: /order/**
+  ribbon:
+    eager-load:
+      enabled: true #是否开启ribbon懒加载  默认在true
+  #路由配置
+#  routes:
+    #zuul注册到eureka后。可以通过服务名来配置路由，并且默认路由为 服务名: /服务名/**
+#    order-server: #路由ID
+#      path: /order/** # 映射路径，localhost:8080//order/**
+#      url: http:127.0.0.1:9002 # 映射路径对应的实际URL地址
+#      serviceId: order-server
+      # 如果路由ID和对应的微服务serviceId一致的话
+#      order-server: /order/**
+
 spring:
   application:
     name: zuul-server
