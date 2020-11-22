@@ -17,7 +17,7 @@ import java.util.Objects;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.setResponseStatus;
 
-@Component
+//@Component
 public class LoginFilterPost extends AbstractGatewayFilterFactory<SetStatusGatewayFilterFactory.Config> implements GlobalFilter, Ordered  {
 
     /**

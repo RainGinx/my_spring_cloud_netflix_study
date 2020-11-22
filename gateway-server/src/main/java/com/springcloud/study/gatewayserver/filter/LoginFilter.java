@@ -16,8 +16,8 @@ import java.util.Objects;
 
 import static org.springframework.cloud.gateway.support.ServerWebExchangeUtils.setResponseStatus;
 
-@Component
-public class LoginFilter implements GlobalFilter, Ordered  {
+//@Component
+public class LoginFilter extends AbstractGatewayFilterFactory<SetStatusGatewayFilterFactory.Config>  implements GlobalFilter, Ordered  {
 
     /**
      * 执行过滤器的业务逻辑
@@ -33,11 +33,11 @@ public class LoginFilter implements GlobalFilter, Ordered  {
         String headerToken = exchange.getRequest().getHeaders().getFirst("access-token");
         //验证token
         //如果token为空  无登录
-        if (Objects.isNull(queryToken) && Objects.isNull(headerToken)){
-            System.out.println("无token，没有登录");
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return exchange.getResponse().setComplete();//请求结束
-        }
+//        if (Objects.isNull(queryToken) && Objects.isNull(headerToken)){
+//            System.out.println("无token，没有登录");
+//            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+//            return exchange.getResponse().setComplete();//请求结束
+//        }
 
         //如果token不为空，验证token的时效、合法性等
         //优先从header获取token
@@ -52,5 +52,19 @@ public class LoginFilter implements GlobalFilter, Ordered  {
     @Override
     public int getOrder() {
         return 10;
+    }
+
+    public GatewayFilter apply(SetStatusGatewayFilterFactory.Config config) {
+        final HttpStatus status = ServerWebExchangeUtils.parse(config.getStatus());
+        return (exchange, chain) -> {
+            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+                System.out.println("在返回响应前执行的代码");
+                // check not really needed, since it is guarded in setStatusCode,
+                // but it's a good example
+                if (!exchange.getResponse().isCommitted()) {
+                    setResponseStatus(exchange, status);
+                }
+            }));
+        };
     }
 }
