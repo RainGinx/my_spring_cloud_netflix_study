@@ -4,15 +4,31 @@ server:
 spring:
   application:
     name: gateway-server
+  #redis配置
+  redis:
+    database: 0
+    host: 192.168.161.129
+    port: 6379
   cloud:
     gateway:
       routes:
-        # 配置路由 路由ID到微服务的URI，断言(判断条件，满足条件才进路由转发)
-       - id: order-server
-#         uri: http://127.0.0.1:9002
-         uri: lb://order-server #gateway注册到注册中心后可以使用"uri: lb://服务名称" 的方式配置，从注册中心拉取服务的请求地址
-         predicates:
-         - Path=/order/** # 这里配置的参数会与uri拼接 如http:127.0.0.1:9002/order/**
+       # 配置路由 路由ID到微服务的URI，断言(判断条件，满足条件才进路由转发)
+      - id: order-server
+#        uri: http://127.0.0.1:9002
+        uri: lb://order-server #gateway注册到注册中心后可以使用"uri: lb://服务名称" 的方式配置，从注册中心拉取服务的请求地址
+        predicates:
+        - Path=/order/** # 这里配置的参数会与uri拼接 如http:127.0.0.1:9002/order/**
+        filters:
+        - name: RequestRateLimiter
+          args:
+            #使用SpEL从容器中获取对象
+            key-resolver: '#{@userKeyResolver}' #自定义的一个bean
+            #令牌桶填充速率(秒)
+            redis-rate-limiter.replenishRate: 1
+            #令牌桶上限
+            redis-rate-limiter.burstCapacity: 3
+
+
 eureka:
   instance:
     prefer-ip-address: true
