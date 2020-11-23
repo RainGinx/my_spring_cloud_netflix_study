@@ -2,17 +2,37 @@ server:
   port: 8006
 
 spring:
+  zipkin:
+#    base-url: http://127.0.0.1:9411/ #使用rabbit的方式发送消息是不需要配置base-url
+    sender:
+#      type: web # 数据传输类型:kafka、rabbit、web
+      type: rabbit # 数据传输类型:kafka、rabbit、web
+  sleuth:
+    sampler:
+      probability: 1 #采样比，默认0.1
+  rabbitmq:
+    host: 192.168.179.129
+    username: admin
+    password: admin
+    port: 5672
+    listener:
+      direct:
+        retry:
+          enabled: true
+      simple:
+        retry:
+          enabled: true
   application:
     name: gateway-server
   #redis配置
   redis:
     database: 0
-    host: 192.168.161.129
+    host: 192.168.179.129
     port: 6379
-eureka:
-  instance:
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-  client:
-    service-url:
-      defaultZone: http://127.0.0.1:9000/eureka/ #,http://1127.0.0.1:8000/eureka/
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    org.springframework.cloud.sleuth: DEBUG

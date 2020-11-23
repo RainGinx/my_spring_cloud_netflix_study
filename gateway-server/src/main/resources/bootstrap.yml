@@ -26,3 +26,12 @@ spring:
 #                redis-rate-limiter.replenishRate: 1
 #                #令牌桶上限
 #                redis-rate-limiter.burstCapacity: 3
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  client:
+    service-url:
+      #      defaultZone: http://192.168.179.128:9000/eureka/ #,http://127.0.0.1:8000/eureka/
+      defaultZone: http://127.0.0.1:9000/eureka/

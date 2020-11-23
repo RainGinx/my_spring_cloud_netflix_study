@@ -1,11 +1,31 @@
 server:
   port: 9001
 spring:
+  zipkin:
+    #    base-url: http://127.0.0.1:9411/ #使用rabbit的方式发送消息是不需要配置base-url
+    sender:
+      #      type: web # 数据传输类型:kafka、rabbit、web
+      type: rabbit # 数据传输类型:kafka、rabbit、web
+  sleuth:
+    sampler:
+      probability: 1 #采样比，默认0.1
+  rabbitmq:
+    host: 192.168.179.129
+    username: admin
+    password: admin
+    port: 5672
+    listener:
+      direct:
+        retry:
+          enabled: true
+      simple:
+        retry:
+          enabled: true
   application:
     name: product-server
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.161.130:3306/springcloud-study
+    url: jdbc:mysql://192.168.179.128:3306/springcloud-study
     username: root
     password: admin
   jpa:
@@ -20,16 +40,16 @@ spring:
         format_sql: true
         type: trace
         use_sql_comment: true
-eureka:
-  instance:
-    hostname: 192.168.161.130
-    metadata-map: #放置自定义元数据
-      user.name: 测试元数据
-      user.password: 还是测试元数据
-    prefer-ip-address: true
-    instance-id: ${spring.cloud.client.ip-address}:${server.port}
-    lease-expiration-duration-in-seconds: 10 #服务失效时间
-    lease-renewal-interval-in-seconds: 5 #服务向注册中心发送心跳的时间间隔
-  client:
-    service-url:
-      defaultZone: http://127.0.0.1:9000/eureka/ #,http://1127.0.0.1:8000/eureka/
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+#  client:
+#    service-url:
+#      #      defaultZone: http://192.168.179.128:9000/eureka/ #,http://127.0.0.1:8000/eureka/
+#      defaultZone: http://127.0.0.1:9000/eureka/
+logging:
+  level: #优先级 从高到低分别是 ERROR、WARN、INFO、DEBUG
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    org.springframework.cloud.sleuth: DEBUG
+# 1号机 注册中心 、网关  2号机 网关、商品 3号机网关、订单
